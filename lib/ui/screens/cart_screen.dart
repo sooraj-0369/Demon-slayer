@@ -46,9 +46,8 @@ class CartScreen extends ConsumerWidget {
           onPressed: cart.items.isEmpty
               ? null
               : () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Checkout not implemented')),
-                  );
+                  ref.read(cartProvider.notifier).clear();
+                  context.go('/order-success');
                 },
           icon: const Icon(Icons.shopping_bag),
           label: Text('Checkout (${cart.totalQuantity})'),

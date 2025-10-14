@@ -8,6 +8,7 @@ import '../screens/arsenal_screen.dart';
 import '../screens/settings_screen.dart';
 import '../widgets/main_navigation.dart';
 import '../screens/cart_screen.dart';
+import '../screens/order_success_screen.dart';
 
 class AppRouter {
   static const String splash = '/';
@@ -61,6 +62,11 @@ class AppRouter {
             path: cart,
             name: 'cart',
             builder: (context, state) => const CartScreen(),
+          ),
+          GoRoute(
+            path: '/order-success',
+            name: 'order-success',
+            builder: (context, state) => const OrderSuccessScreen(),
           ),
         ],
       ),

@@ -350,4 +350,31 @@ class AppTheme {
       ),
     );
   }
+
+  static ThemeData theme({required bool isDark, required bool neon}) {
+    final base = isDark ? darkTheme : lightTheme;
+    if (!neon) return base;
+
+    // Apply stronger neon glow accents when neon mode is enabled
+    return base.copyWith(
+      cardTheme: base.cardTheme.copyWith(
+        elevation: isDark ? 12 : 8,
+        shadowColor: primaryColor.withOpacity(isDark ? 0.6 : 0.4),
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: (base.elevatedButtonTheme.style ?? const ButtonStyle()).copyWith(
+          elevation: WidgetStateProperty.all(isDark ? 10 : 6),
+          shadowColor: WidgetStateProperty.all(primaryColor.withOpacity(0.8)),
+        ),
+      ),
+      bottomNavigationBarTheme: base.bottomNavigationBarTheme.copyWith(
+        selectedItemColor: primaryColor,
+        unselectedItemColor: isDark ? Colors.white70 : Colors.black54,
+      ),
+      chipTheme: base.chipTheme.copyWith(
+        selectedColor: primaryColor.withOpacity(0.9),
+        side: BorderSide(color: primaryColor.withOpacity(0.6)),
+      ),
+    );
+  }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/constants.dart';
+import '../../presentation/providers/theme_provider.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
@@ -22,6 +23,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final themeState = ref.watch(themeProvider);
+    _isDarkMode = themeState.isDarkMode;
+    _isNeonMode = themeState.isNeonMode;
     return Scaffold(
       appBar: AppBar(title: const Text(AppStrings.settings)),
       body: ListView(
@@ -48,9 +52,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     ),
                     value: _isDarkMode,
                     onChanged: (value) {
-                      setState(() {
-                        _isDarkMode = value;
-                      });
+                      ref.read(themeProvider.notifier).setDarkMode(value);
                     },
                     secondary: const Icon(Icons.dark_mode),
                   ),
@@ -61,9 +63,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     subtitle: const Text('Enable neon glow effects'),
                     value: _isNeonMode,
                     onChanged: (value) {
-                      setState(() {
-                        _isNeonMode = value;
-                      });
+                      ref.read(themeProvider.notifier).setNeonMode(value);
                     },
                     secondary: const Icon(Icons.auto_awesome),
                   ),

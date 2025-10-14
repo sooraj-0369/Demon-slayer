@@ -20,14 +20,15 @@ class WeaponCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Card(
       clipBehavior: Clip.antiAlias,
+      margin: EdgeInsets.zero,
       child: InkWell(
         onTap: onTap,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Weapon Image
-            Expanded(
-              flex: 3,
+            AspectRatio(
+              aspectRatio: 16 / 11, // stabilize tile height to avoid pixel shifts
               child: Stack(
                 children: [
                   Container(
@@ -46,39 +47,37 @@ class WeaponCard extends ConsumerWidget {
                         end: Alignment.bottomRight,
                       ),
                     ),
-                    child: weapon.imageUrl.isNotEmpty
-                        ? Image.network(
-                            weapon.imageUrl,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              return const Center(
-                                child: Icon(
-                                  Icons.image_not_supported,
-                                  size: 48,
-                                  color: Colors.white54,
-                                ),
-                              );
-                            },
-                            loadingBuilder: (context, child, loadingProgress) {
-                              if (loadingProgress == null) return child;
-                              return Center(
-                                child: CircularProgressIndicator(
-                                  value:
-                                      loadingProgress.expectedTotalBytes != null
-                                      ? loadingProgress.cumulativeBytesLoaded /
-                                            loadingProgress.expectedTotalBytes!
-                                      : null,
-                                ),
-                              );
-                            },
-                          )
-                        : const Center(
-                            child: Icon(
-                              Icons.auto_awesome,
-                              size: 48,
-                              color: Colors.white54,
+                    child: ClipRRect(
+                      child: weapon.imageUrl.isNotEmpty
+                          ? Image.network(
+                              weapon.imageUrl,
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                              height: double.infinity,
+                              errorBuilder: (context, error, stackTrace) {
+                                return const Center(
+                                  child: Icon(
+                                    Icons.image_not_supported,
+                                    size: 48,
+                                    color: Colors.white54,
+                                  ),
+                                );
+                              },
+                              loadingBuilder: (context, child, loadingProgress) {
+                                if (loadingProgress == null) return child;
+                                return const Center(child: SizedBox(width: 24, height: 24, child: CircularProgressIndicator(strokeWidth: 2)));
+                              },
+                              cacheWidth: 512,
+                              cacheHeight: 352,
+                            )
+                          : const Center(
+                              child: Icon(
+                                Icons.auto_awesome,
+                                size: 48,
+                                color: Colors.white54,
+                              ),
                             ),
-                          ),
+                    ),
                   ),
 
                   // Favorite button
@@ -158,11 +157,9 @@ class WeaponCard extends ConsumerWidget {
             ),
 
             // Weapon Info
-            Expanded(
-              flex: 2,
-              child: Padding(
-                padding: const EdgeInsets.all(12),
-                child: Column(
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Weapon Name
@@ -188,8 +185,7 @@ class WeaponCard extends ConsumerWidget {
                     const SizedBox(height: 8),
 
                     // Stats
-                    Expanded(
-                      child: Row(
+                    Row(
                         children: [
                           Expanded(
                             child: _buildStatItem(
@@ -217,7 +213,7 @@ class WeaponCard extends ConsumerWidget {
                           ),
                         ],
                       ),
-                    ),
+                    const SizedBox(height: 8),
                   ],
                 ),
               ),
